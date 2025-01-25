@@ -1,0 +1,35 @@
+*.DS_Store
+
+# .log
+*.log
+
+# .json
+*.json
+
+# .png
+*.png
+
+# .zip
+# *.zip
+
+# .h5
+# *.h5
+
+# .keras
+# *.keras
+
+# .v2
+*.v2
+
+# pyc folder
+__pycache__/
+
+# venv folder
+venv/
+.venv/
+
+# wandb
+wandb/
+*.wandb
+
+
