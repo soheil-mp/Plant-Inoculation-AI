@@ -1,0 +1,145 @@
+# Pre-commit configuration for Plant Inoculation AI
+# See https://pre-commit.com for more information
+
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: name-tests-test
+        args: [--pytest-test-first]
+      - id: requirements-txt-fixer
+
+  # Python code formatting with Black
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        language_version: python3
+        args: [--line-length=88]
+
+  # Python import sorting with isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: [--profile=black, --line-length=88]
+
+  # Python linting with flake8
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        args: [--max-line-length=88, --extend-ignore=E203,W503]
+        additional_dependencies:
+          - flake8-docstrings
+          - flake8-bugbear
+          - flake8-comprehensions
+          - flake8-simplify
+          - flake8-annotations
+
+  # Python type checking with mypy
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        args: [--ignore-missing-imports, --scripts-are-modules]
+        additional_dependencies:
+          - types-requests
+          - types-PyYAML
+          - types-setuptools
+
+  # Security analysis with bandit
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.8.0
+    hooks:
+      - id: bandit
+        args: [-r, -f, json, -o, bandit-report.json]
+        exclude: ^tests/
+
+  # Python upgrade syntax with pyupgrade
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.19.0
+    hooks:
+      - id: pyupgrade
+        args: [--py39-plus]
+
+  # Check for Python anti-patterns with autopep8
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.1
+    hooks:
+      - id: autopep8
+        args: [--diff, --max-line-length=88]
+
+  # Dockerfile linting
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        args: [--ignore=DL3008, --ignore=DL3013]
+
+  # YAML formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        types: [yaml]
+        exclude: ^.github/
+
+  # Jupyter notebook cleaning
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.9.1
+    hooks:
+      - id: nbqa-black
+        args: [--line-length=88]
+      - id: nbqa-isort
+        args: [--profile=black]
+      - id: nbqa-flake8
+        args: [--max-line-length=88, --extend-ignore=E203,W503]
+
+  # Remove output from Jupyter notebooks
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout
+
+  # Poetry check
+  - repo: https://github.com/python-poetry/poetry
+    rev: 1.8.4
+    hooks:
+      - id: poetry-check
+      - id: poetry-lock
+        args: [--check]
+
+  # Documentation links check
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: v3.12.2
+    hooks:
+      - id: markdown-link-check
+        args: [--config=.markdown-link-check.json]
+
+# Configuration for individual tools
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false 

@@ -1,0 +1,176 @@
+[tool.poetry]
+name = "plant-inoculation-ai"
+version = "0.1.0"
+description = "AI-powered automated plant root inoculation system combining computer vision, deep learning, and robotics"
+authors = ["Soheil"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/plant-ai/plant-inoculation-ai"
+repository = "https://github.com/plant-ai/plant-inoculation-ai"
+documentation = "https://plant-inoculation-ai.readthedocs.io"
+keywords = ["computer-vision", "robotics", "deep-learning", "agriculture", "automation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+packages = [{include = "plant_inoculation_ai", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+# Core scientific computing
+numpy = "^1.24.0"
+pandas = "^2.0.0"
+scipy = "^1.10.0"
+matplotlib = "^3.7.0"
+
+# Computer vision and image processing
+opencv-python = "^4.8.0"
+scikit-image = "^0.21.0"
+Pillow = "^10.0.0"
+
+# Deep learning with GPU support
+tensorflow = "^2.13.0"
+keras = "^2.13.0"
+
+# Robotics and simulation
+pybullet = "^3.2.6"
+gymnasium = "^0.29.0"
+
+# Reinforcement learning with GPU support
+stable-baselines3 = {version = "^2.1.0", extras = ["extra"]}
+torch = {version = "^2.0.0", source = "pytorch"}
+torchvision = {version = "^0.15.0", source = "pytorch"}
+torchaudio = {version = "^2.0.0", source = "pytorch"}
+
+# Experiment tracking and monitoring
+wandb = "^0.15.0"
+tensorboard = "^2.13.0"
+
+# Jupyter support (optional)
+jupyter = {version = "^1.0.0", optional = true}
+ipykernel = {version = "^6.25.0", optional = true}
+
+# Utilities
+tqdm = "^4.66.0"
+rich = "^13.5.0"
+typer = "^0.9.0"
+pydantic = "^2.3.0"
+
+# GPU acceleration libraries
+cupy-cuda11x = {version = "^12.0.0", optional = true}
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
+
+[tool.poetry.group.dev.dependencies]
+# Testing
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.11.0"
+pytest-xdist = "^3.3.0"
+
+# Code quality
+black = "^23.7.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+mypy = "^1.5.0"
+bandit = "^1.7.5"
+pylint = "^2.17.0"
+
+# Pre-commit
+pre-commit = "^3.4.0"
+
+# Documentation
+sphinx = "^7.1.0"
+sphinx-rtd-theme = "^1.3.0"
+sphinx-autodoc-typehints = "^1.24.0"
+myst-parser = "^2.0.0"
+
+# Build and packaging
+build = "^0.10.0"
+twine = "^4.0.0"
+
+[tool.poetry.extras]
+jupyter = ["jupyter", "ipykernel"]
+gpu = ["cupy-cuda11x"]
+all = ["jupyter", "ipykernel", "cupy-cuda11x"]
+
+[tool.poetry.scripts]
+plant-inoculation = "plant_inoculation_ai.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# Tool configurations
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["plant_inoculation_ai"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+] 
